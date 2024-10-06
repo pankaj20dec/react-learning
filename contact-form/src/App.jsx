@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import { database, set, ref } from './firebase';
 import './App.css'
 
 function App() {
@@ -15,11 +16,30 @@ function App() {
  const handleChecked = (e)=>{
       setIsChecked(e.target.checked);
  }
+ const handleSubmit = async()=>{
+  //  e.preventDefault();
+  // const res = await fetch("https://contact-form-62a0f-default-rtdb.firebaseio.com/contact-form.json",{
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type" : "application/json"
+  //   },
+  //   body: JSON.stringify({
+  //     inputValue: inputValue,
+  //     selectOption: selectOption
+  //   })
+    
+  // })
+  // console.log(`${inputValue}`);
+  set(ref(database,'users/'), {
+    inputValue: inputValue,
+    selectOption: selectOption
+  })
+ }
   return (
     <>
       <h1>Contact form</h1>
       <div className="card">
-         <form>
+         <form method='post'>
               <div><input type="text" placeholder="Enter name" value={inputValue} onChange={handleChange}/></div>
               <div><select value={selectOption} onChange={handleSelect}>
                   <option>Select Option</option>
@@ -33,6 +53,7 @@ function App() {
               <input type="checkbox" checked={ischecked} onChange={handleChecked} />
                 Red
               </label>
+              <input type='submit' onClick={handleSubmit}/>
          </form>
         <div> Name: {inputValue} </div>
          <div>Select Option: {selectOption}</div> 
